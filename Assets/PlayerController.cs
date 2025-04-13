@@ -54,7 +54,6 @@ public class PlayerController : MonoBehaviour
         if (Blocked(transform.position, direction)) return false;
         else
         {
-            // transform.Translate(direction);
             transform.position += new Vector3(direction.x, direction.y, 0);
             return true;
         } 

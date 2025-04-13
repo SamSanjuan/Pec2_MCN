@@ -17,11 +17,6 @@ public class GizmoGrid : MonoBehaviour
         UpdateGrid(); 
     }
 
-    void Update()
-    {     
-        //UpdateGrid();
-    }
-
     private void UpdateGrid()
     {
         foreach (Transform child in transform)

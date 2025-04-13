@@ -20,7 +20,6 @@ public class gameManager : MonoBehaviour
     public TMP_InputField widthInput;
     public TMP_InputField heightInput;
 
-
     private void Start()
     {
         cam.orthographicSize = sliderControl.value;

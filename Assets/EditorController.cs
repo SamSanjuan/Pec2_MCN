@@ -30,6 +30,8 @@ public class EditorController : MonoBehaviour
 
     public GizmoGrid gizmoGrid;
 
+    public bool editMode = false;
+
     void Start()
     {
         UpdateLevelDisplay();
@@ -38,51 +40,47 @@ public class EditorController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (editMode)
         {
-            Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 gridPos = new Vector2(
-                Mathf.Round(worldPos.x),
-                Mathf.Round(worldPos.y)
-            );
-
-
-            if (!GridZone(worldPos))
+            if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("Fuera del grid");
-                return;
-            }
+                Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 gridPos = new Vector2(
+                    Mathf.Round(worldPos.x),
+                    Mathf.Round(worldPos.y)
+                );
 
-            /*
-            if (!placementArea.OverlapPoint(gridPos))
-            {
-                Debug.Log("Zona fuera del Grid");
-                return;
-            }*/
 
-            if (currentTool == ToolType.Eraser)
-            {
-                if (placedTiles.ContainsKey(gridPos))
+                if (!GridZone(worldPos))
                 {
-                    Destroy(placedTiles[gridPos]);
-                    placedTiles.Remove(gridPos);
-                }
-            }
-            else
-            {
-                if (placedTiles.ContainsKey(gridPos))
-                {
-                    Destroy(placedTiles[gridPos]);
-                    placedTiles.Remove(gridPos);
+                    Debug.Log("Fuera del grid");
+                    return;
                 }
 
-                GameObject prefab = GetPrefabFromTool(currentTool);
-                if (prefab != null)
+                if (currentTool == ToolType.Eraser)
                 {
-                    GameObject placed = Instantiate(prefab, gridPos, Quaternion.identity);
-                    placedTiles[gridPos] = placed;
+                    if (placedTiles.ContainsKey(gridPos))
+                    {
+                        Destroy(placedTiles[gridPos]);
+                        placedTiles.Remove(gridPos);
+                    }
                 }
-            }
+                else
+                {
+                    if (placedTiles.ContainsKey(gridPos))
+                    {
+                        Destroy(placedTiles[gridPos]);
+                        placedTiles.Remove(gridPos);
+                    }
+
+                    GameObject prefab = GetPrefabFromTool(currentTool);
+                    if (prefab != null)
+                    {
+                        GameObject placed = Instantiate(prefab, gridPos, Quaternion.identity);
+                        placedTiles[gridPos] = placed;
+                    }
+                }
+            } 
         }
     }
 
@@ -171,7 +169,7 @@ public class EditorController : MonoBehaviour
         string path = Application.dataPath + "/Resources/" + FileName;
         if (!File.Exists(path))
         {
-            Debug.LogWarning("Archivo no encontrado: " + path);
+            Debug.LogWarning("No se encuentra: " + path);
             return;
         }
 
